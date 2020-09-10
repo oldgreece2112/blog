@@ -13,7 +13,8 @@ var postSchema = new mongoose.Schema({
     date: {
         type: Date,
         default: Date.now(),
-    }
+    },
+    author: String
 });
 
 module.exports = mongoose.model("Post", postSChema);
