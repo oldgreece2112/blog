@@ -14,6 +14,8 @@ var app = express();
 
 var User = require("./models/user.model");
 
+var userRoute = require("./routes/user.route");
+
 //app configuration
 var PORT = process.env.PORT || 8000;
 
@@ -32,6 +34,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -45,6 +48,8 @@ app.use((req, res, next) => {
     res.locals.currentUser = req.user;
     next();
 });
+
+app.use("/user", userRoute);
 
 app.listen(PORT, process.env.IP, function(){
     console.log("Server listening on port " + PORT);
