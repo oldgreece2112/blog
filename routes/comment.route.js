@@ -36,15 +36,44 @@ router.post("/create/:postID", (req, res) => {
 });
 
 router.get("/edit/:commentID", (req, res) => {
+    var id = req.params.commentID;
 
+    Comment.findById(id, (err, comment) => {
+        if(err){
+            console.log(err);
+        }else{
+            res.render("comments/edit", {comment});
+        }
+    });
 });
 
-router.post("/edit/:commentID", (req, res) => {
+router.post(":postID/edit/:commentID", (req, res) => {
+    var id = req.params.commentID;
 
+    var text = req.body.text;
+
+    Comment.findById(id, (err, foundComment) => {
+        if(err){
+            console.log(err);
+        }else{
+            foundComment.text = text;
+            foundComment.save();
+            res.redirect("/posts/view/" + req.params.postID);
+        }
+    });
 });
 
-router.get("destroy/:postID/:commentID", (req, res) => {
+router.get("destroy/:commentID", (req, res) => {
+    var id = req.params.commentID;
 
+    Comment.findByIdAndDelete(id, (err) => {
+        if(err){
+            console.log(err);
+        }else{
+            req.flash("success", "You have successfully deleted your comment!");
+            res.redirect("/");
+        }
+    })
 });
 
 module.exports  = router;
